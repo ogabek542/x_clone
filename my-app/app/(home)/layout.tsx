@@ -1,10 +1,11 @@
 import { ChildProps } from "@/types";
 import React from "react";
+import { Navbar } from "./components";
 
 const Homelayout = ({ children }: ChildProps) => {
   return (
     <div className="h-full">
-      <p>navbar</p>
+      <Navbar />
       <main className="h-full pt-40">{children}</main>
     </div>
   );
