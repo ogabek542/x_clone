@@ -10,9 +10,11 @@ export const createDocument = mutation({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
+
     if (!identity) {
       throw new Error("Not authenticated");
     }
+
     const userId = identity.subject;
 
     const document = await ctx.db.insert("documents", {
@@ -22,6 +24,7 @@ export const createDocument = mutation({
       isArchived: false,
       isPublished: false,
     });
+
     return document;
   },
 });
@@ -32,9 +35,11 @@ export const getDocuments = query({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
+
     if (!identity) {
       throw new Error("Not authenticated");
     }
+
     const userId = identity.subject;
 
     const documents = await ctx.db

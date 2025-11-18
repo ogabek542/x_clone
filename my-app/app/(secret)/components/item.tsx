@@ -21,6 +21,7 @@ import { useUser } from "@clerk/clerk-react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { create } from "domain";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ItemProps {
   id?: Id<"documents">;
@@ -33,7 +34,7 @@ interface ItemProps {
   level?: number;
 }
 
-const Item = ({
+export const Item = ({
   label,
   id,
   onClick,
@@ -48,20 +49,28 @@ const Item = ({
     onExpand?.();
   };
 
-  const ChevronIcon = expanded ? ChevronDown : ChevronRight;
   const { user } = useUser();
   const createDocument = useMutation(api.document.createDocument);
+
+  const ChevronIcon = expanded ? ChevronDown : ChevronRight;
 
   const onCreateDocument = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     event.stopPropagation();
-
     if (!id) return;
     createDocument({
       title: "Untitled",
       parentDocument: id,
+    }).then((document) => {
+      if (!expanded) {
+        onExpand?.();
+      }
     });
+  };
+  const handleExpan = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    onExpand?.();
   };
 
   return (
@@ -127,4 +136,14 @@ const Item = ({
   );
 };
 
-export default Item;
+Item.Skeleton = function ItemSkeleton({ level }: { level?: number }) {
+  return (
+    <div
+      style={{ paddingLeft: level ? `${level * 12 + 12}px` : "12px" }}
+      className="flex gap-x-2 py-[3px]"
+    >
+      <Skeleton className="h-4 w-4" />
+      <Skeleton className="h-4 w-[30%]" />
+    </div>
+  );
+};

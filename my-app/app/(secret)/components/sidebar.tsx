@@ -2,7 +2,7 @@ import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { ChevronsLeft, MenuIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "usehooks-ts";
-import DocumentList from "./document-list";
+import { DocumentList } from "./document-list";
 
 const Sidebar = () => {
   const isMobile = useMediaQuery("(max-width: 770px)");
