@@ -4,18 +4,28 @@ import { ChildProps } from "@/types";
 import React from "react";
 import { useConvexAuth } from "convex/react";
 import { Loader } from "@/components/ui/loader";
+import { redirect } from "next/navigation";
+import { Sidebar } from "./components";
 
 const SecretLayout = ({ children }: ChildProps) => {
   const { isAuthenticated, isLoading } = useConvexAuth();
   if (isLoading) {
     return (
-      <div>
+      <div className="w-full flex justify-center items-center">
         <Loader size={"lg"} />
       </div>
     );
   }
+  if (!isAuthenticated) {
+    return redirect("/");
+  }
 
-  return <div>{children}</div>;
+  return (
+    <div className="flex w-full">
+      <Sidebar />
+      <main className="flex-1 h-full overflow-y-auto">{children}</main>
+    </div>
+  );
 };
 
 export default SecretLayout;
