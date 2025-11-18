@@ -11,7 +11,7 @@ const SecretLayout = ({ children }: ChildProps) => {
   const { isAuthenticated, isLoading } = useConvexAuth();
   if (isLoading) {
     return (
-      <div className="w-full flex justify-center items-center">
+      <div className="w-full h-full flex justify-center items-center">
         <Loader size={"lg"} />
       </div>
     );

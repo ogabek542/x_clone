@@ -1,11 +1,14 @@
-import React, { ElementRef, useRef, useState } from "react";
+import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { ChevronsLeft, MenuIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useMediaQuery } from "usehooks-ts";
 
 const Sidebar = () => {
+  const isMobile = useMediaQuery("(max-width: 770px)");
+
   const sidebarRef = useRef<ElementRef<"div">>(null);
   const navbarRef = useRef<ElementRef<"div">>(null);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(isMobile);
   const [isResetting, setIsResetting] = useState(false);
   const isResizing = useRef(false);
 
@@ -29,9 +32,9 @@ const Sidebar = () => {
       setIsCollapsed(false);
       setIsResetting(true);
 
-      sidebarRef.current.style.width = "240px";
-      navbarRef.current.style.width = "calc(100% - 240px)";
-      navbarRef.current.style.left = "240px";
+      sidebarRef.current.style.width = isMobile ? "100%" : "240px";
+      navbarRef.current.style.width = isMobile ? "100%" : "calc(100% - 240px)";
+      navbarRef.current.style.left = isMobile ? "100%" : "240px";
 
       // Reset the resetting state after animation completes
       setTimeout(() => setIsResetting(false), 300);
@@ -68,18 +71,29 @@ const Sidebar = () => {
     document.removeEventListener("mouseup", handleMouseUp);
   };
 
+  useEffect(() => {
+    if (isMobile) {
+      collapse();
+    } else {
+      reset();
+    }
+  }, [isMobile]);
+
   return (
     <>
       <div
         className={cn(
           "group/sidebar h-screen bg-secondary overflow-y-auto relative flex w-60 flex-col z-50",
           isResetting && "transition-all duration-300 ease-in-out",
-          isCollapsed && "w-0"
+          isMobile && "w-full left-0"
         )}
         ref={sidebarRef}
       >
         <div
-          className="h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-3 right-2 opacity-0 group-hover/sidebar:opacity-100 transition cursor-pointer"
+          className={cn(
+            "h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-3 right-2 opacity-0 group-hover/sidebar:opacity-100 transition cursor-pointer",
+            isMobile && "opacity-100"
+          )}
           role="button"
           onClick={collapse}
         >
