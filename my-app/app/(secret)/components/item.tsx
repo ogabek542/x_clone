@@ -5,6 +5,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import {
   ChevronDown,
   ChevronRight,
+  LucideIcon,
   MoreHorizontal,
   Plus,
   Trash,
@@ -27,7 +28,7 @@ interface ItemProps {
   id?: Id<"documents">;
   label: string;
   onClick?: () => void;
-  icon?: React.ReactNode;
+  icon?: LucideIcon;
   active?: boolean;
   documentIcon?: string;
   expanded?: boolean;
@@ -39,12 +40,12 @@ export const Item = ({
   label,
   id,
   onClick,
-  icon,
   active,
   expanded,
   documentIcon,
   onExpand,
-  level = 0,
+  icon: Icon,
+  level,
 }: ItemProps) => {
   const handleExpand = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
@@ -93,6 +94,14 @@ export const Item = ({
         >
           <ChevronIcon className="h-4 w-4 shrink-0 text-muted-foreground/50" />
         </div>
+      )}
+
+      {documentIcon ? (
+        <div className="shrink-0 mr-2 text-[18px]">{documentIcon}</div>
+      ) : (
+        Icon && (
+          <Icon className="shrink-0 h-[18px] w-[18px] mr-2 text-muted-foreground" />
+        )
       )}
 
       <span className="truncate">{label}</span>

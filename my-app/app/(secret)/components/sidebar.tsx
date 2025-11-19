@@ -1,11 +1,16 @@
 import React, { ElementRef, useEffect, useRef, useState } from "react";
-import { ChevronsLeft, MenuIcon } from "lucide-react";
+import { ChevronsLeft, MenuIcon, Plus, Search, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "usehooks-ts";
 import { DocumentList } from "./document-list";
+import { Item } from "./item";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { UserBox } from "./user-box";
 
 const Sidebar = () => {
   const isMobile = useMediaQuery("(max-width: 770px)");
+  const createDocument = useMutation(api.document.createDocument);
 
   const sidebarRef = useRef<ElementRef<"div">>(null);
   const navbarRef = useRef<ElementRef<"div">>(null);
@@ -80,6 +85,12 @@ const Sidebar = () => {
     }
   }, [isMobile]);
 
+  const onCreateDocument = () => {
+    createDocument({
+      title: "Untitled",
+    });
+  };
+
   return (
     <>
       <div
@@ -101,9 +112,15 @@ const Sidebar = () => {
           <ChevronsLeft className="w-6 h-6" />
         </div>
 
-        <div>User Profile Item</div>
+        <div>
+          <UserBox />
+          <Item label="Search" icon={Search} />
+          <Item label="Settings" icon={Settings} />
+          <Item label="New document" icon={Plus} onClick={onCreateDocument} />
+        </div>
         <div className="mt-4">
           <DocumentList />
+          <Item onClick={onCreateDocument} icon={Plus} label="Add a page" />
         </div>
 
         <div

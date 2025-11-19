@@ -8,6 +8,7 @@ import { Item } from "./item";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useParams, usePathname, useRouter } from "next/navigation";
+import { Trash } from "lucide-react";
 
 interface DocumentListProps {
   parentDocumentId?: Id<"documents">;
