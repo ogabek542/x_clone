@@ -19,11 +19,14 @@ import { Progress } from "@/components/ui/progress";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { PopoverContent } from "@radix-ui/react-popover";
 import { TrashBox } from "./trash-box";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const Sidebar = () => {
   const isMobile = useMediaQuery("(max-width: 770px)");
   const createDocument = useMutation(api.document.createDocument);
 
+  const router = useRouter();
   const sidebarRef = useRef<ElementRef<"div">>(null);
   const navbarRef = useRef<ElementRef<"div">>(null);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
@@ -98,8 +101,14 @@ const Sidebar = () => {
   }, [isMobile]);
 
   const onCreateDocument = () => {
-    createDocument({
+    const promise = createDocument({
       title: "Untitled",
+    }).then((docId) => router.push(`/documents/${docId}`));
+
+    toast.promise(promise, {
+      loading: "Creating a new document...",
+      success: "Created new document",
+      error: "Failed to create new document",
     });
   };
 

@@ -7,13 +7,22 @@ import { Plus } from "lucide-react";
 import Image from "next/image";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const DocumentPage = () => {
   const { user } = useUser();
+  const router = useRouter();
   const createDocument = useMutation(api.document.createDocument);
   const onCreateDocument = () => {
-    createDocument({
+    const promise = createDocument({
       title: "Untitled",
+    }).then((docId) => router.push(`/documents/${docId}`));
+
+    toast.promise(promise, {
+      loading: "Creating a new blank...",
+      success: "Created new blank",
+      error: "Failed to create new blank",
     });
   };
 
