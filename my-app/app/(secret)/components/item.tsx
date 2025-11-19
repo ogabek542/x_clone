@@ -29,6 +29,7 @@ interface ItemProps {
   onClick?: () => void;
   icon?: React.ReactNode;
   active?: boolean;
+  documentIcon?: string;
   expanded?: boolean;
   onExpand?: () => void;
   level?: number;
@@ -41,6 +42,7 @@ export const Item = ({
   icon,
   active,
   expanded,
+  documentIcon,
   onExpand,
   level = 0,
 }: ItemProps) => {

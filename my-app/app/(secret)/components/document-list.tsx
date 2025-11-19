@@ -22,6 +22,7 @@ export const DocumentList = ({
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const router = useRouter();
   const params = useParams();
+  const pathname = usePathname();
 
   const onExpand = (documentId: string) => {
     setExpanded((prev) => ({
@@ -60,6 +61,10 @@ export const DocumentList = ({
           expanded && "last:block",
           level === 0 && "hidden"
         )}
+        role="button"
+        style={{
+          paddingLeft: level ? `${level * 12 + 12}px` : undefined,
+        }}
       >
         No documents found.
       </p>
@@ -72,6 +77,8 @@ export const DocumentList = ({
             expanded={expanded[document._id]}
             onExpand={() => onExpand(document._id)}
             onClick={() => onRedirect(document._id)}
+            active={params.documentId === document._id}
+            documentIcon={document.icon}
           />
           {expanded[document._id] && (
             <DocumentList parentDocumentId={document._id} level={level + 1} />
