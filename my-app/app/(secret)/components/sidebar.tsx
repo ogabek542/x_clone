@@ -18,7 +18,7 @@ import { UserBox } from "./user-box";
 import { Progress } from "@/components/ui/progress";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { PopoverContent } from "@radix-ui/react-popover";
-import { TrashBox } from "./trash-box";
+import TrashBox from "./trash-box";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 

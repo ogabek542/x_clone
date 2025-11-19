@@ -23,6 +23,8 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { create } from "domain";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface ItemProps {
   id?: Id<"documents">;
@@ -53,8 +55,24 @@ export const Item = ({
   };
 
   const { user } = useUser();
+  const router = useRouter();
   const createDocument = useMutation(api.document.createDocument);
   const deleteDocument = useMutation(api.document.remove);
+  const archive = useMutation(api.document.archive);
+
+  const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.stopPropagation();
+    if (!id) return;
+    archive({ id });
+
+    const promise = archive({ id }).then(() => router.push("/documents"));
+
+    toast.promise(promise, {
+      loading: "Archiving document...",
+      success: "Archived document",
+      error: "Failed to archive document",
+    });
+  };
 
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
 
@@ -140,7 +158,7 @@ export const Item = ({
               side="right"
               forceMount
             >
-              <DropdownMenuItem onClick={onDeleteDocument}>
+              <DropdownMenuItem onClick={onArchive}>
                 <Trash className="h-4 w-4 mr-2" />
                 Delete
               </DropdownMenuItem>
