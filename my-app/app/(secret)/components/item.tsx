@@ -54,6 +54,7 @@ export const Item = ({
 
   const { user } = useUser();
   const createDocument = useMutation(api.document.createDocument);
+  const deleteDocument = useMutation(api.document.remove);
 
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
 
@@ -74,6 +75,22 @@ export const Item = ({
   const handleExpan = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
     onExpand?.();
+  };
+
+  const onDeleteDocument = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+    if (!id) return;
+
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this document?"
+    );
+    if (!confirmed) return;
+
+    deleteDocument({ id }).catch((error) => {
+      console.error("Failed to delete document:", error);
+    });
   };
 
   return (
@@ -123,7 +140,7 @@ export const Item = ({
               side="right"
               forceMount
             >
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={onDeleteDocument}>
                 <Trash className="h-4 w-4 mr-2" />
                 Delete
               </DropdownMenuItem>
