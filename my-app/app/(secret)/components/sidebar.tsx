@@ -177,19 +177,19 @@ const Sidebar = () => {
 
       <div
         className={cn(
-          "absolute top-0 z-50 left-60 w-[calc(100%-240px)]",
-          isResetting && "transition-all duration-300 ease-in-out",
-          isCollapsed && "left-0 w-full"
+          "absolute top-0 z-50 left-60 w-[calc(100% - 240px)]",
+          isResetting && "transition-all ease-in duration-300",
+          isMobile && "w-full left-0"
         )}
         ref={navbarRef}
       >
         {!!params.documentId ? (
-          <Navbar />
+          <Navbar isCollapsed={isCollapsed} reset={reset} />
         ) : (
-          <nav className="bg-transparent px-3 py-2 w-full">
+          <nav className={cn("bg-transparent px-3 py-2 w-full")}>
             {isCollapsed && (
               <MenuIcon
-                className="w-6 h-6 text-muted-foreground cursor-pointer"
+                className="h-6 w-6 text-muted-foreground"
                 role="button"
                 onClick={reset}
               />
