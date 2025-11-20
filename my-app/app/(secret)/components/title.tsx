@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
+import { useMutation } from "convex/react";
 import React, { useRef, useState } from "react";
 
 interface TitleProps {
@@ -11,18 +13,31 @@ export const Title = ({ document }: TitleProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState(document.title || "Untitled");
   const [isEditing, setIsEditing] = useState(false);
+  const updateFields = useMutation(api.document.updateFields);
+
   const enableInput = () => {
     setTitle(document.title || "Untitled");
     setIsEditing(true);
-    setTimeout(() => inputRef.current?.focus(), 0);
+    setTimeout(() => {
+      inputRef.current?.focus();
+      inputRef.current?.setSelectionRange(0, inputRef.current.value.length);
+    }, 0);
   };
   const disableInput = () => {
     setIsEditing(false);
   };
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
+    updateFields({
+      id: document._id,
+      title: event.target.value || "Untitled",
+    });
   };
-  const onKeydown = () => {};
+  const onKeydown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      disableInput();
+    }
+  };
 
   return (
     <div className="flex items-center gap-x-1">
@@ -49,4 +64,8 @@ export const Title = ({ document }: TitleProps) => {
       )}
     </div>
   );
+};
+
+Title.Skeleton = function TitleSkleton() {
+  return <div className="h-9 w-20 rounded-md" />;
 };
