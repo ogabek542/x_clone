@@ -8,7 +8,7 @@ const DocumentIdPage = () => {
   const params = useParams<{ documentId: string }>();
   const documentId = params.documentId as Id<"documents">;
 
-  return <div>{documentId}</div>;
+  return <div className="mt-24">{documentId}</div>;
 };
 
 export default DocumentIdPage;
