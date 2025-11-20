@@ -6,6 +6,7 @@ import React from "react";
 import { Loader } from "@/components/ui/loader";
 import { MenuIcon } from "lucide-react";
 import { Title } from "./title";
+import { Publish } from "./publish";
 
 interface NavbarProps {
   isCollapsed: boolean;
@@ -45,7 +46,9 @@ const Navbar = ({ isCollapsed, reset }: NavbarProps) => {
       )}
       <div className="flex items-center justify-between w-full">
         <Title document={document} />
-        <div className="flex items-center gap-x-2"></div>
+        <div className="flex items-center gap-x-2">
+          <Publish document={document} />
+        </div>
       </div>
     </div>
   );
