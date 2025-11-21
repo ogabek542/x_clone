@@ -160,7 +160,7 @@ export const getDocumentById = query({
     const document = await ctx.db.get(args.id);
 
     if (!document) {
-      throw new Error("Not found");
+      return null;
     }
 
     if (document.isPublished && !document.isArchived) {
@@ -168,19 +168,18 @@ export const getDocumentById = query({
     }
 
     if (!identity) {
-      throw new Error("Not authenticated");
+      return null;
     }
 
     const userId = identity.subject;
 
     if (document.userId !== userId) {
-      throw new Error("Unauthorized");
+      return null;
     }
 
     return document;
   },
 });
-
 export const updateFields = mutation({
   args: {
     id: v.id("documents"),
