@@ -1,3 +1,5 @@
+"use client";
+
 import ConfirmModal from "@/components/modals/confirm-modal";
 import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/ui/loader";

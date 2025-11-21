@@ -1,7 +1,18 @@
 "use client";
 
-import React from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
+import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { cn } from "@/lib/utils";
+import { useUser } from "@clerk/clerk-react";
+import { useMutation } from "convex/react";
 import {
   ChevronDown,
   ChevronRight,
@@ -10,71 +21,55 @@ import {
   Plus,
   Trash,
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
-import { useUser } from "@clerk/clerk-react";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { create } from "domain";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
+import React, { use } from "react";
 import { toast } from "sonner";
 
 interface ItemProps {
   id?: Id<"documents">;
   label: string;
-  onClick?: () => void;
-  icon?: LucideIcon;
-  active?: boolean;
-  documentIcon?: string;
-  expanded?: boolean;
-  onExpand?: () => void;
   level?: number;
+  expanded?: boolean;
+  active?: boolean;
+  icon?: LucideIcon;
+  documentIcon?: string;
+  isSearch?: boolean;
+  isSettings?: boolean;
+  onExpand?: () => void;
+  onClick?: () => void;
 }
 
 export const Item = ({
   label,
   id,
+  level,
+  onExpand,
+  expanded,
   onClick,
   active,
-  expanded,
   documentIcon,
-  onExpand,
   icon: Icon,
-  level,
+  isSearch,
+  isSettings,
 }: ItemProps) => {
-  const handleExpand = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation();
-    onExpand?.();
-  };
-
   const { user } = useUser();
   const router = useRouter();
+
   const createDocument = useMutation(api.document.createDocument);
-  const deleteDocument = useMutation(api.document.remove);
   const archive = useMutation(api.document.archive);
 
   const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
     if (!id) return;
-    archive({ id });
 
     const promise = archive({ id }).then(() => router.push("/documents"));
 
     toast.promise(promise, {
       loading: "Archiving document...",
-      success: "Archived document",
+      success: "Archived document!",
       error: "Failed to archive document",
     });
   };
-
-  const ChevronIcon = expanded ? ChevronDown : ChevronRight;
 
   const onCreateDocument = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -90,26 +85,15 @@ export const Item = ({
       }
     });
   };
-  const handleExpan = (event: React.MouseEvent<HTMLDivElement>) => {
+
+  const handleExpand = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     event.stopPropagation();
     onExpand?.();
   };
 
-  const onDeleteDocument = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    event.stopPropagation();
-    if (!id) return;
-
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this document?"
-    );
-    if (!confirmed) return;
-
-    deleteDocument({ id }).catch((error) => {
-      console.error("Failed to delete document:", error);
-    });
-  };
+  const ChevronIcon = expanded ? ChevronDown : ChevronRight;
 
   return (
     <div
@@ -140,6 +124,18 @@ export const Item = ({
       )}
 
       <span className="truncate">{label}</span>
+
+      {isSearch && (
+        <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+          <span className="text-xs">⌘</span>K
+        </kbd>
+      )}
+
+      {isSettings && (
+        <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+          <span className="text-xs">⌘</span>J
+        </kbd>
+      )}
 
       {!!id && (
         <div className="ml-auto flex items-center gap-x-2">
