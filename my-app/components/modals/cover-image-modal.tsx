@@ -5,7 +5,7 @@ import { useMutation } from "convex/react";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader } from "../ui/dialog";
-import { SingleImageDropzone } from "../shared/single-image-dropzone";
+// import { SingleImageDropzone } from "../shared/single-image-dropzone";
 import { Id } from "@/convex/_generated/dataModel";
 
 const CoverImageModal = () => {
