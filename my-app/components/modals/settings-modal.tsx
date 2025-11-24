@@ -59,8 +59,15 @@ const SettingsModal = () => {
     }
   };
 
+  const handleOpenChange = (open: boolean) => {
+    if (open) {
+      settings.onOpen();
+    } else {
+      onClose();
+    }
+  };
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={onToggle}>
       <DialogContent>
         <DialogHeader className="border-b pb-3">
           <h2 className="text-lg font-medium">My settings</h2>

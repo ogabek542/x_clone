@@ -49,7 +49,7 @@ export const SearchCommand = () => {
   };
 
   if (!mounted) return null;
-  if (documents === undefined) return null;
+  // if (documents === undefined) return null;
 
   return (
     <CommandDialog open={isOpen} onOpenChange={onClose}>
