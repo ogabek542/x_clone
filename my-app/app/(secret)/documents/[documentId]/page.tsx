@@ -31,7 +31,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
       {/* <Cover url={document?.coverImage} /> */}
       <Cover
         url={
-          "https://www.google.com/url?sa=i&url=https%3A%2F%2Fstock.adobe.com%2Fsearch%3Fk%3Dfloral%2Bheader&psig=AOvVaw3Xo8MHmGPjhb9spx6_0DmH&ust=1764131118190000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCMjV19a6jJEDFQAAAAAdAAAAABAL"
+          "https://t3.ftcdn.net/jpg/11/37/76/10/360_F_1137761079_hOzJmsXNfQQnZGHUMbGrFDDkT8sKa325.jpg"
         }
       />
 

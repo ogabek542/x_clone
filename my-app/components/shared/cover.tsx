@@ -20,7 +20,7 @@ const Cover = ({ url, preview }: CoverProps) => {
   return (
     <div
       className={cn(
-        "relative w-full h-[30vh] group",
+        "relative w-full h-[35vh] group",
         !url && "h-[10vh]",
         url && "bg-muted"
       )}
