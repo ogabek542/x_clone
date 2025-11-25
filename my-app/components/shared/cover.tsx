@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { ImageIcon, X } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 import { useCoverImage } from "@/hooks/use-cover-image";
-// import { useEdgeStore } from "@/lib/edgestore";
+import { useEdgeStore } from "@/lib/edgestore";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
@@ -19,19 +19,19 @@ interface CoverProps {
 const Cover = ({ preview, url }: CoverProps) => {
   const params = useParams();
   const coverImage = useCoverImage();
-  //   const { edgestore } = useEdgeStore();
+  const { edgestore } = useEdgeStore();
   const updateFields = useMutation(api.document.updateFields);
 
   const onRemove = async () => {
-    // if (url) {
-    //   await edgestore.publicFiles.delete({
-    //     url,
-    //   });
-    // }
-    // updateFields({
-    //   id: params.documentId as Id<"documents">,
-    //   coverImage: "",
-    // });
+    if (url) {
+      await edgestore.publicFiles.delete({
+        url,
+      });
+    }
+    updateFields({
+      id: params.documentId as Id<"documents">,
+      coverImage: "",
+    });
   };
 
   return (
