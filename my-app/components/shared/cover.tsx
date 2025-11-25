@@ -13,10 +13,27 @@ import { Id } from "@/convex/_generated/dataModel";
 
 interface CoverProps {
   url?: string;
-  preview?: string;
+  preview?: boolean;
 }
 
-const Cover = ({ url, preview }: CoverProps) => {
+const Cover = ({ preview, url }: CoverProps) => {
+  const params = useParams();
+  const coverImage = useCoverImage();
+  //   const { edgestore } = useEdgeStore();
+  const updateFields = useMutation(api.document.updateFields);
+
+  const onRemove = async () => {
+    // if (url) {
+    //   await edgestore.publicFiles.delete({
+    //     url,
+    //   });
+    // }
+    // updateFields({
+    //   id: params.documentId as Id<"documents">,
+    //   coverImage: "",
+    // });
+  };
+
   return (
     <div
       className={cn(
@@ -25,16 +42,27 @@ const Cover = ({ url, preview }: CoverProps) => {
         url && "bg-muted"
       )}
     >
-      {!!url && <Image src={url} alt="cover" fill className="object-cover" />}
+      {!!url && <Image fill src={url} alt="cover" className="object-cover" />}
+
       {url && !preview && (
-        <div className="opacity-0 group-hover:opacity-100 absolute top-5 right-20 flex items-center gap-x-2">
+        <div className="opacity-0 group-hover:opacity-100 absolute bottom-5 right-20 flex items-center gap-x-2">
           <Button
             size={"sm"}
             variant={"outline"}
             className="text-muted-foreground text-xs"
+            onClick={() => coverImage.onReplace(url)}
           >
             <ImageIcon />
-            <span>Change cover </span>
+            <span>Change cover</span>
+          </Button>
+          <Button
+            size={"sm"}
+            variant={"outline"}
+            className="text-muted-foreground text-xs"
+            onClick={onRemove}
+          >
+            <X className="h-4 w-4" />
+            <span>remove</span>
           </Button>
         </div>
       )}
@@ -43,3 +71,7 @@ const Cover = ({ url, preview }: CoverProps) => {
 };
 
 export default Cover;
+
+Cover.Skeleton = function CoverSkeleton() {
+  return <Skeleton className="w-full h-[12vh]" />;
+};
